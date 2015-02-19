@@ -1,0 +1,232 @@
+/*doc
+---
+title: typography.scss
+name: typography
+category: Files
+---
+ type styles including sizes and vertical spacing
+*/
+
+@include font-face("albert", font-files("fs_albert.ttf", "fs_albert.otf",  "fs_albert.svg",  "fs_albert.woff"));
+
+
+@include font-face("albert-bold", font-files("fs_albert-bold-webfont.ttf", "fs_albert-bold-webfont.otf",  "fs_albert-bold-webfont.svg",  "fs_albert-bold-webfont.woff"));
+
+@include font-face("FontAwesome", font-files("fontawesome-webfont.ttf", "FontAwesome.otf",  "fontawesome-webfont.svg",  "fontawesome-webfont.woff"));
+
+sup, sub {
+  vertical-align: 0;
+  position: relative;
+}
+
+sub {
+  top: $sub-sup-alignment;
+}
+
+sup {
+  bottom: $sub-sup-alignment;
+}
+
+/*doc
+---
+title: other text styles
+name: other
+category: typography
+---
+Other text-styles
+
+example | extension
+--------|----------
+<p class="example-condense">I am condensed</p> | `@extend %condense`
+<p class="example-text-size-large">I am a size larger than most text</p> | `@extend %text-size-large`
+
+
+
+*/
+
+/*doc
+---
+title: header styles
+name: header styles
+category: typography
+---
+
+we want to use semantic headers - a logical flow of `h1`, `h2`, `h3` etc...
+
+example | extension
+--------|----------
+<p class="example-header-allcaps">I am all caps and fancy</p> | `@extend %header-allcaps`
+<p class="example-header-allcaps-plain">I am all-caps but plain </p> | `@extend %header-allcaps-plain`
+<p class="example-header-allcaps-xlarge">I am x-large</p> | `@extend %header-allcaps-xlarge`
+<p class="example-brand-title">I am the color of the journal</p> | `@extend %brand-title`
+
+
+*/
+
+%header-allcaps {
+ font-size: rem-calc($txt-size-medium);
+ font-family: $font-face-fancy;
+ @extend %txt-transform;
+}
+%header-allcaps-plain {
+  @extend %header-allcaps;
+  font-family: $font-face-plain;
+}
+.header-allcaps-smallest {
+  @extend %header-allcaps-plain;
+  font-size: $txt-size-xxxsmall;
+}
+%header-allcaps-xlarge {
+  @extend %header-allcaps;
+  font-size: rem-calc($txt-size-xlarge);
+}
+
+%header-xlarge-light {
+  font-size: rem-calc($txt-size-xlarge);
+  color: $clr-light-text;
+  font-family: $font-face-fancy;
+}
+
+%header-bottom-shadow {
+  padding-bottom: rem-calc(17);
+  margin-bottom: rem-calc(17);
+  box-shadow: $default-header-shadow;
+  text-align: center;
+}
+%brand-title {
+  @extend %header-allcaps;
+  @extend %brand-color;
+  margin-bottom: $pad-small;
+}
+%brand-header {
+  @extend %brand-background;
+  color: $clr-highlight-text;
+  padding: 0 $pad-default;
+  font-family: $font-face-fancy;
+  font-size: rem-calc($txt-size-medium-large);
+  line-height: $pad-large;
+}
+
+
+/*doc
+---
+title: link styles
+name: link styles
+category: typography
+---
+
+in most cases you can leave the a tag alone but in some cases we need to manipulate the link behaviour. these also work when they are added to the parent tag like the `p` or `div`.
+
+example | extension
+--------|----------
+<a class="example-link">I don't have an underline but I still turn the default color<a> | `@extend %link-text-body`
+<a class="example-link-text-white">I am a white link<a> | `@extend %link-text-white`
+
+
+### mixin
+`@mixin link-text($color, $decoration)`
+ `$decoration` sets the hover style:
+
+ option  | result
+ -----------|------------------
+ `$decoration:none` | there is NO underline and the text turns the highlight color
+ `$decoration:underline` | text stays the same color but has an underline
+
+*/
+@mixin link-text($color: $clr-body-text, $decoration: none) {
+  color: $color;
+  text-decoration: none;
+
+  &:hover, a:hover {
+    @if $decoration == none {
+    color: $plos-default;
+    text-decoration: none;
+  }
+    @else if $decoration == underline {
+      color: $color;
+      text-decoration: underline;
+    }
+  }
+}
+
+%link-text-body, %link-text-body a {
+  @include link-text();
+}
+
+%link-text-white, %link-text-white a {
+  @include link-text($color: $white,$decoration: underline);
+}
+
+%link-text-underline, %link-text-underline a {
+  @include link-text($decoration: underline);
+}
+
+%link-text-default, %link-text-default a {
+  @include link-text($plos-default, underline);
+}
+
+//////////////
+//font decorations
+///////////////
+
+%small-italic {
+  font-size: rem-calc($txt-size-xxxsmall);
+  font-style: italic;
+}
+%condense {
+  letter-spacing: -0.5px;
+}
+%txt-transform {
+  text-transform: uppercase;
+}
+
+.inline-intro {
+  font-weight: bold;
+}
+.no-margin { margin-bottom: 0;}
+
+//////////////
+//form styles
+///////////////
+
+@mixin input-placeholder-color ($color: $clr-input-placeholder) {
+  ::-webkit-input-placeholder {
+    color: $color;
+  }
+  :-moz-placeholder {
+    /* Firefox 18- */
+    color: $color;
+  }
+  ::-moz-placeholder {
+    /* Firefox 19+ */
+    color: $color;
+  }
+  :-ms-input-placeholder {
+    color: $color;
+  }
+}
+
+//////////////
+//font-sizes styles
+///////////////
+
+/*doc
+---
+title: note
+name: note
+category: typography
+---
+
+This is one place not to use @extend, since this is a semantic class name
+
+```html_example
+           <p class="note">This is a note</p>
+          <p class="caption">this is a caption</p>
+          <figcaption>This is a figcaption</figcaption>
+ ```
+
+*/
+
+.note,.caption, figcaption { color: $grey-med-light;}
+
+%text-size-large {font-size: $txt-size-large;}

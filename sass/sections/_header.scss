@@ -1,0 +1,367 @@
+/*
+ *       These are the header styles
+  header
+   topslot (banner ad)
+   nav-user (***production has "user")
+   pagehdr
+       nav-main (foundation)
+         logo
+         top-bar-section  (foundation)
+             ul.nav-elements /
+             li:
+               'browse'
+               'for authors'
+               'about us'
+               'search'
+ */
+header {
+  background: $clr-header;
+
+
+}
+
+.head-top {
+  @extend .hide-for-print;
+  @extend %bg-dark;
+  @extend .text-center;
+  @extend %brand-border;
+  border-bottom-width: 6px;
+  border-bottom-style: solid;
+  padding: $pad-xsmall $pad-small;
+  .center {
+    width: 748px;
+    margin: 0 auto;
+    height: 90px;
+  }
+  .title {
+    width: 18px;
+    height: 88px;
+    text-indent: -9999px;
+    background: image-url('text.vert.ad.gif') no-repeat 0 6px;
+    float: left;
+  }
+}
+
+$width-logo: 4;
+$width-search: 5;
+$width-nav: $block-grid-elements - $width-logo;
+
+.nav {
+  @extend .plos-row;
+  .nav-user {
+    @extend .inline-list; // from foundation
+    @extend .right; // from foundation
+    font-weight: bold;
+    > li {
+      margin-top: rem-calc(-5);
+      margin-left: rem-calc(4);
+
+      > a {
+        @include rounded-pill(transparent, rem-calc(14 16 8));
+        color: $plos-default;
+
+        &:hover {
+          color: $clr-highlight-text;
+          background: $plos-default;
+        }
+
+      }
+    }
+    li.highlighted {
+      > a {
+        color: $clr-highlight-text;
+
+        body.plosone & {
+          color:  $plos-default;
+
+          &:hover {
+            color: $clr-highlight-text;
+          }
+        }
+
+        @extend %brand-background-hover;
+      }
+    }
+  }
+}
+
+
+.logo {
+  @include plos-grid-column($pixelwidth: columns, $columns: $width-logo);
+  @extend .title-area; // foundation
+  @include icon-offscreen;
+  height: 41px;
+  //brand-specific logo in plos-themes/code/desktop/[BRAND]/resource/img :
+  background: image-url('logo.png') no-repeat 0 0;
+}
+
+.home-link {
+  @extend .name; // foundation
+}
+
+/* using Foundation Top Bar
+ all @extend .class are Foundation
+ */
+
+.nav-main {
+  @extend .plos-row;
+  @extend .top-bar; // foundation
+  font-family: $font-face-navigation;
+  > .dropdown {
+    visibility: hidden;
+  }
+}
+
+.top-bar-section {
+  @extend .hide-for-print;
+  // foundation
+  @include plos-grid-column-nomargin($pixelwidth: columns, $columns: $width-nav, $float: right);
+
+  ul.nav-elements {
+    @extend .right; // foundation
+    padding-right: 0;
+    ul.dropdown li a,  ul.dropdowncallout li a{
+       line-height: 1.5em !important;  // this line is needed to overide foundation stuff.
+    }
+  }
+  //this level of specificity is needed to override foundation styles
+
+  ul.nav-elements > li {
+    float: left;
+    cursor: pointer;
+    margin-left: 3px;
+    border-left: 1px solid $clr-separator;
+    line-height: 30px;
+    padding: rem-calc(7 15);
+    font-family: $font-face-navigation;
+    font-size: $txt-size-xlarge;
+    color: $plos-default;
+    &:first-child {
+      border-left: none;
+      margin-left: 0;
+    }
+    &:last-child {
+      border-left: 1px solid $grey-light;
+    }
+    &.subject-area {
+      @include js-tooltip-container();
+      color: $grey-med;
+      cursor: pointer;
+    }
+  }
+
+  .subject-area-info {
+    @include js-tooltip-target();
+    @include tooltip($width: 350px, $tooltip-padding: $pad-xsmall);
+    top: -50px;
+    left: -60%;
+    text-align: center;
+    font-size: $txt-size-small;
+    background-color: $white;
+    color: $grey-med;
+    font-family: $font-face-plain;
+
+@include arrow-bottom($arrow-color: $white);
+
+  }
+
+  ul > li.has-dropdown.hover {
+    @include border-top-radius();
+    box-shadow: $nav-main-box-shadow;
+    background: $white;
+    padding-bottom: 12px;
+    color: $clr-body-text;
+    // &hover + li is used to account for the padding needed for the
+    //  drop shadow. if the color isn't changed it sticks out too much.
+    &:hover + li {
+      border-left: 1px solid scale-color(#666, $lightness: 82%);
+    }
+    > ul.dropdown {
+
+      top: 45px;
+      @include border-radius();
+      width: rem-calc(240);
+      left: -13px;
+      padding-top: rem-calc(20);
+      padding-bottom: rem-calc(30);
+      background: $white;
+      box-shadow: $nav-main-box-shadow;
+    }
+
+    ul.dropdown li a {
+      @extend .dropdownanchor;
+    }
+
+    .calloutcontainer {
+      width: rem-calc(530);
+      top: 46px;
+      right: -103px;
+      padding: rem-calc(20 0 30);
+      background: $white;
+      box-shadow: $nav-main-box-shadow;
+      @include border-radius();
+      cursor: default;
+      .dropdowncallout {
+        float: right;
+        display: inline-block;
+        width: rem-calc(240);
+        border-left: 1px solid $grey-light;
+        background: $white;
+        @include border-radius();
+        li a {
+          @extend .dropdownanchor;
+        }
+      }
+    }
+    a.btn {
+      @include rounded-pill($background: $clr-btn-secondary);
+      display: inline-block;
+      margin-top: rem-calc(20);
+      margin-left: rem-calc(15);
+      padding: rem-calc(0 10);
+      line-height: 35px;
+      &:hover {
+        background: $clr-btn-primary;
+      }
+    }
+  }
+  .dropdownanchor {
+    width: 100%;
+    line-height: 1;
+    padding: rem-calc(7 30 8 30);
+    font-family: $font-face-plain;
+    font-size: $txt-size-medium;
+    white-space: pre-wrap;
+    &:hover {
+      color: $clr-highlight-text;
+      background: $clr-highlight-hover;
+    }
+  }
+  .head-search {
+    @extend .right;
+    padding-top: 2px;
+    padding-left: rem-calc(20);
+    padding-right: 0;
+    text-align: right;
+    //the following is needed because &hover + li is used to account for the
+    // padding needed for the drop shadow. if the color isn't changed it sticks
+    // out too much.
+    border-left: 1px solid $grey-light;
+    form {
+      background: $white;
+      display: inline-block;
+      input:focus,
+      select:focus,
+      textarea:focus,
+      button:focus {
+        outline: none;
+      }
+      legend, label {
+        display: none;
+      }
+
+      fieldset {
+        border: none;
+        margin: 0;
+        padding: 0 $pad-small;
+        background-color: $white;
+      }
+
+      input[type="text"] {
+        margin: 0;
+        padding: 9px 0 10px;
+        border: none;
+        display: inline-block;
+        width: rem-calc(150);
+        font-family: $font-face-fancy;
+        font-size: $txt-size-xlarge;
+        color: $clr-input-active;
+        top: 0 !important;
+      }
+      @include input-placeholder-color();
+
+      &.placeholder {
+        @include input-placeholder-color(#999);
+      }
+
+      button[type="submit"] {
+        @include postfix($white, $white); //foundation
+        padding: 0;
+        margin: 0;
+        border: none;
+        display: inline-block;
+        /// overwriting foundation styles
+        top: 0 !important;
+        .search-icon {
+          @extend .fa;
+          @extend .fa-search;
+          font-size: rem-calc($txt-size-xlarge);
+        }
+      }
+    }
+  }
+
+  //overrides for top-bar styles
+  ul > li.head-search:not(.has-form) > a {
+    line-height: 32px;
+    padding: 0;
+    font-size: rem-calc($txt-size-small);
+    @include link-text($clr-highlight-hover, underline);
+  }
+  // this is the only way I could find to override the white background on hover
+  ul > li.head-search:hover:not(.has-form) > a {
+    background: $clr-header;
+    color: $plos-default;
+  }
+}
+
+.submit {
+  //'Submit your manuscript' callout
+  position: relative;
+  float: left;
+  display: inline !important;
+  width: rem-calc(280);
+  margin-right: $pad-small;
+  padding: rem-calc(0 20 30 15);
+  font-family: $font-face-navigation;
+  font-size: rem-calc($txt-size-medium);
+  cursor: default;
+  h3 {
+    @extend %header-bottom-shadow;
+    margin-top: $pad-xsmall;
+    font-size: rem-calc($txt-size-23large);
+  }
+  ul {
+    margin-left: rem-calc(15);
+    display: block !important;
+    list-style-type: disc;
+    width: auto;
+    li {
+      margin-left: rem-calc(15);
+      width: auto;
+      cursor: default;
+
+    }
+  }
+
+}
+
+// this seems excessive but it is necessary to override foundation
+// by referencing 'top-bar-section dropdown'
+.top-bar-section .dropdown .submit li a {
+  display: inline !important;
+  line-height: normal !important;
+  padding: 0;
+  font-family: $font-face-navigation;
+  font-size: rem-calc($txt-size-medium-large);
+  color: $plos-default !important;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// print items (styles are in _type.scss)
+#user, #topslot {
+  @extend .hide-for-print;
+}
+

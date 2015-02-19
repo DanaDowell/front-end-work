@@ -1,0 +1,546 @@
+// HOME CONTENT
+
+$block-height: rem-calc(250);
+$block-height-small: rem-calc(180);
+
+$image-width: rem-calc(70);
+$hero-height: rem-calc(380);
+$image-container: ($image-width + $pad-small);
+
+// this mixin extends the foundation grid to do two things it can't do
+//1. add margins on the outside if needed
+//2. use pixel widths - Digital Pulp submitted designs with columns in pixel widths that vary from page to page.
+// questions:
+// I am using foundation settings values.
+.home {
+  ///////
+  // home specific colors
+  /////
+  background: $clr-header;
+
+  %width-full {
+    @include plos-grid-column($pixelwidth: full-width);
+  }
+
+  %width-xx-small {
+    @include plos-grid-column(183);
+  }
+
+  %width-x-small {
+    @include plos-grid-column(267);
+  }
+
+  %width-small {
+    @include plos-grid-column(306);
+  }
+
+  %width-medium {
+    @include plos-grid-column(470);
+  }
+
+  %width-large {
+    @include plos-grid-column(633);
+  }
+}
+.carousel-wrap.small {
+  //more styling for carousel in _components.scss
+  @extend %width-small;
+  height: $block-height;
+}
+
+///////
+//page scaffolding
+/////
+
+//sizes:
+
+ .block {
+  &.xx-small {
+    @extend %width-xx-small;
+  }
+
+  &.x-small {
+    @extend %width-x-small;
+  }
+  &.small {
+    @extend %width-small;
+  }
+  &.medium {
+    @extend %width-medium;
+  }
+  &.large {
+    @extend %width-large;
+  }
+ }
+
+ .row{
+   @extend .plos-row;
+ }
+
+.hero {
+  @extend %width-full;
+  @include blocks($padding: none, $shadow: none);
+  position: relative;
+  background: transparent;
+}
+
+
+.hero{
+  // overlay colors
+  &.overlay-dark > a:before {
+    @extend .overlay;
+// we are using images here to match lemur.
+    background: image-url("gradient-dark_1x364.png") repeat-x bottom;
+  }
+  &.overlay-light > a:before {
+    @extend .overlay;
+    background: image-url("gradient-light_1x364.png") repeat-x bottom;
+  }
+  img {
+    @include border-top-radius();
+    width: 100%;
+  }
+  // hero colors: default is white text
+  color: $white;
+  a {
+    color: $white;
+  }
+  &.dark-text,
+  &.dark-text a {
+    color: $clr-body-text;
+
+  }
+
+  // hero text
+  .hero-content {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding: $pad-small $pad-default;
+    font-size: rem-calc($txt-size-medium-large);
+    h4 {
+      font-size: $txt-size-h1;
+      @extend .no-margin;
+    }
+    .authors {
+      width: 75%;
+      display: inline-block;
+      vertical-align: bottom;
+    }
+    p {
+      @extend .no-margin;
+      font-size: rem-calc($txt-size-medium-large);
+
+      &.credit{
+        @extend %small-italic;
+        text-align: right;
+        width: 23%;
+        vertical-align: bottom;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.block {
+  position: relative;
+  height: $block-height;
+  .blurb{
+    color: $grey-med-dark;
+    a {
+      @include link-text($color: $plos-default, $decoration: underline);
+    }
+  }
+  .block-image {
+    width: $image-container;
+    display: block;
+    position: absolute;
+    left: $pad-small;
+    top: $pad-small;
+
+  }
+  &.image .block-content {
+    margin-left: ($image-container + $pad-small);
+    margin-right: $pad-small;
+    height: ($block-height - ($pad-default));
+    overflow: hidden;
+  }
+  // components
+  .date {
+    @extend %small-italic;
+    @extend .right;
+    //padding-right on block-content needs to be overridden here
+    margin-right: -$pad-default;
+  }
+  .credits {
+    @extend %small-italic;
+    position: absolute;
+    bottom: $pad-small;
+    left: ($image-container + $pad-default);
+    margin: 0 $pad-small + $pad-xsmall 0 0;
+
+  }
+  .category {
+    @extend %brand-title;
+    margin-bottom: $pad-xsmall;
+  }
+  .title {
+    //@extend h2;
+    font-size: $txt-size-h2;
+    margin-bottom: $pad-xsmall;
+    @extend %link-text-body;
+
+    //in case p tag is added in CMS, need to override global settings
+    p {
+      font-size: inherit;
+      line-height: inherit;
+    }
+  }
+
+  .block-content {
+    position: relative;
+    padding-right: $pad-default;
+    font-size: rem-calc($txt-size-default);
+  }
+
+  &.small {
+    .title {
+     // @extend h4;
+      font-size: $txt-size-h4;
+      @extend .subheader;
+      font-family: $font-face-fancy;
+    }
+  }
+
+}
+
+// ROW THREE: is VERY different than the others
+// ROW THREE: overall scaffolding
+.row.three{
+  .column {
+    &:first-child {
+      @include plos-grid-column-nomargin($pixelwidth: columns, $columns: 8); //width + gutter
+    }
+
+    &:first-child + .column.right {
+      @include plos-grid-column-nomargin($pixelwidth: columns, $columns: 4); //width + gutter
+      position: relative;
+      > div > div {
+        float: none;
+      }
+    }
+  }
+}
+// ROW THREE: heights
+
+.row.three{
+  .column {
+    &:first-child {
+      .block.large {
+        height: $block-height-small;
+        .block-image {
+          height: ($block-height-small - ($pad-default));
+          overflow: hidden;
+        }
+      }
+      .block.small {
+        height: $block-height;
+        .block-image {
+          height: ($block-height - ($pad-default));
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}
+
+// ROW THREE: spacing and other styling details.
+.row.three {
+  .row-small-blocks .small {
+    $small-block-spacing: ($pad-xsmall/2);
+    .date, .category {
+      margin-bottom: $small-block-spacing;
+    }
+    .date {
+      float: none !important; // sadly have to use this to override the .right on the other blocks
+      margin-right: 0;
+    }
+    .title {
+      margin-top: $small-block-spacing;
+      a {
+        font-family: $font-face-fancy-bold;
+        font-size: rem-calc($txt-size-medium);
+        @include link-text($color: $grey-med-dark);
+      }
+    }
+  }
+}
+
+// ROW THREE: heights and other styling details.
+#billboard {
+  @extend %width-full;
+  @include blocks($grey-dark, $shadow: none, $radius: none, $padding: $pad-small $pad-default);
+  position: relative;
+  h3, a {
+    color: $white;
+  }
+  h3 {
+    font-size: $txt-size-h2;
+  }
+  h4 {
+    font-family: $font-face-plain;
+    color: $grey-med-light;
+  }
+  a {  //not using rounded-pill: would need too many overrides
+    @extend %brand-background-hover;
+    border-radius: $border-radius-default;
+    padding: $pad-xsmall $pad-default;
+    position: absolute;
+    display: inline-block;
+    right: $pad-default;
+    top: 18px;
+  }
+}
+
+#article-list {
+  height: $block-height;
+  @extend .block;
+  @extend %width-x-small;
+  position: relative;
+
+  h3 {
+    @extend %brand-title;
+  }
+
+  ul.list-plain {
+    @extend .no-bullet; // from foundation
+    line-height: normal;
+
+    li {
+      color: $clr-body-text;
+      margin-bottom: 15px;
+
+      a {
+        @extend %link-text-body;
+        display: block;
+        font-family: $font-face-fancy;
+        font-size: $txt-size-xsmall;
+      }
+    }
+  }
+  .truncated-tooltip {
+    @extend .has-tip; //foundation
+  }
+}
+  .more-link {
+    position: absolute;
+    bottom: $pad-small;
+    left: $pad-small;
+    right: auto;
+    > a {
+      @extend %link-text-body;
+      @extend %header-allcaps-plain;
+    }
+    &:after {
+      @extend .more-icon;
+    }
+
+  }
+
+//Tooltips are added to the bottom of the page & hidden. This class should not be nested.
+.tooltip {
+  width: 300px !important;
+  @include single-box-shadow();
+  border: 1px solid $grey-med-light;
+}
+
+#issue {
+  @extend %width-xx-small;
+  @extend .block;
+
+  height: $block-height;
+  .current-img {
+    width: rem-calc(160);
+  }
+  .boxtitle {
+    margin-top: rem-calc(5);
+    a {
+      @extend %link-text-body;
+      @extend %header-allcaps-xlarge;
+      @extend %condense;
+      display: block;
+      margin-bottom: rem-calc(-5);
+      font-weight: 900;
+    }
+    .subhead {
+      font-face: $font-face-plain;
+      font-size: $txt-size-medium-large;
+    }
+  }
+}
+
+#twitter {
+  @extend %width-small;
+  margin-bottom: rem-calc(16); // non-standard to account for the drop-shadow on adjacent containers
+}
+ //ISCB box
+.linkbox {
+  @extend .block-card;
+  @extend %width-small;
+  height: rem-calc(410); // PG-we have to set this height to be standard so that we know how tall to make the twitter feed.
+  .image-header{
+    background-color: #1c2e5e;
+    text-align: center;
+  }
+  ul {
+    @extend .no-bullet; // from foundation
+    li {
+      padding: $pad-default $pad-medium;
+      border-top: 1px solid $grey-light;
+      @extend %link-text-body;
+      a {
+        font-family: $font-face-fancy;
+        font-size: rem-calc($txt-size-medium-large);
+      }
+    }
+  }
+}
+
+#submission-links {
+  @include blocks($color: $grey-dark, $radius: all, $padding: $pad-small $pad-medium $pad-xsmall $pad-medium, $shadow: none);
+  @extend %width-small;
+ //padding-top: $pad-small + $pad-xsmall;
+  h3 {
+    @extend %header-bottom-shadow;
+    @extend %header-xlarge-light;
+  }
+  .split-container {
+    @extend .inline-list;
+    margin: 0 0 $pad-small;
+    line-height: inherit;
+  }
+  .split-item {
+    margin: 0 !important;
+    width: 50%;
+    height: 40px;
+    text-align: center;
+    &:first-child {
+      border-right: 1px solid $grey-med-dark;
+    }
+    a {
+      @include link-text($color: #89a0d0, $decoration: underline);
+      font-size: $txt-size-medium-large;
+      font-family: $font-face-fancy;
+    }
+  }
+}
+
+#social-links {
+  @extend %width-small;
+  @include blocks($color: #04417d, $radius: all, $padding: $pad-xsmall, $shadow: none);
+
+  h3 {
+    @extend %header-xlarge-light;
+    text-indent: $pad-small;
+    margin-bottom: $pad-small;
+  }
+  ul {
+    list-style: none;
+    margin: 0 0 0 rem-calc(-4);
+    > li {
+      float: left;
+      margin: 0 0 0 rem-calc(4);
+      > a {
+        background: $plos-default;
+        border-radius: $border-radius-default;
+        display: inline-block;
+        height: ($txt-size-xxlarge * 2);
+        text-align: center;
+        color: $clr-light-text;
+        &:hover {
+          background: $grey-dark;
+        }
+      }
+      .social {
+        width: ($txt-size-xxlarge * 2);
+      }
+      .icon-text {
+        @extend .aria-text;
+      }
+    }
+    .social-blogs {
+      width: rem-calc(104);
+      line-height: ($txt-size-xxlarge * 2);
+      font-size: rem-calc($txt-size-medium-large);
+      font-family: $font-face-fancy;
+    }
+  }
+}
+
+#blogs {
+  $image-width: rem-calc(35px);
+  @extend %width-small;
+  @extend .block-card;
+  height: $block-height;
+  position: relative;
+
+  .block-header{
+    @extend %brand-header;
+    @extend %link-text-white;
+  }
+
+  #blogrss {
+    padding: $pad-default $pad-default 0;
+    div {
+      @include clearfix();
+      margin-bottom: $pad-small;
+    }
+    .postimg {
+      float: left;
+      height: 75px;
+      width: $image-width;
+      margin-right: $pad-small;
+    }
+    .postdate {
+      margin: 0;
+      font-size: $txt-size-xxxsmall;
+      font-family: $font-face-plain;
+      color: $clr-muted;
+      padding: 0;
+    }
+    .posttitle {
+      height: 30px;
+      line-height: 15px;
+      overflow: hidden;
+      margin: $pad-xsmall 0;
+      a {
+        @extend %link-text-body;
+        font-family: $font-face-fancy;
+        font-size: $txt-size-small;
+      }
+    }
+    .postauthor {
+      @extend %small-italic;
+      color: $clr-muted;
+      margin: 0;
+      padding: 0;
+    }
+  }
+  .more-link {
+    bottom: $pad-small;
+    left: ($image-width + ($pad-large + $pad-small));
+  }
+}
+
+#ad-slot-bottom {
+  @extend .plos-row;
+  .ad-item {
+    @extend %width-small;
+    iframe {
+      @extend .block-card;
+    }
+
+  }
+}
+
+

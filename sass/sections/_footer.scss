@@ -1,0 +1,60 @@
+/* 
+ *      styles for the footer
+ */
+footer {
+  @extend .hide-for-print;
+  // widths
+  .brand-column{
+    @extend .plos-column-5 }
+  .link-column{
+    @extend .plos-column-3;
+  }
+  @extend %bg-dark;
+  padding: rem-calc(25 0 60); // 25px 0 60px;
+  color: $grey-med-light;
+
+  .logo-footer {
+    padding-bottom: rem-calc(25);
+  }
+  //pseudo elements are for Firefox
+  a, a:visited, a:focus, a:active {
+    @include link-text($color: $grey-med-light, $decoration: underline){
+  }
+  .nav {
+    position: relative;
+    }
+  }
+  .nav-aux {
+    @extend .inline-list;
+    margin-top: rem-calc(45);
+    margin-left: 0;
+
+    li {
+      margin-left: rem-calc(10);
+      padding: rem-calc(0 10 0 0);
+      border-right: 1px solid $grey-med-light;
+    }
+    li:first-child {
+      margin-left: 0;
+    }
+    li:last-child {
+      padding-right: none;
+      border-right: none;
+    }
+  }
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  }
+  .nav-special {
+    font-size: $txt-size-xsmall;
+    a {
+      font-weight: bold;
+      color: $clr-light-text
+    }
+  }
+
+

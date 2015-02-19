@@ -1,0 +1,1030 @@
+
+//  use "// TEMP-PROD:" for temporary styles to match production until all tabs are re-styled
+$temp-pad-tabs: rem-calc(8) rem-calc(9);// TEMP-PROD: remove this line. set padding: $pad-small; for  article-tab >tab-title > a
+
+
+// extensible layout styles
+
+.text-article-intro {
+  font-size: $txt-size-default;
+  color: $grey-med-dark;
+
+  a {
+    @include link-text($grey-med-dark, underline);
+  }
+}
+
+.set-grid {
+  @extend .plos-row;
+  width: rem-calc(980);
+}
+
+.article-body {
+  @include plos-grid-column(755, $gutter: none);
+}
+
+.article-aside {
+  @extend .hide-for-print;
+  @include plos-grid-column(180, $gutter: none);
+  float: right;
+}
+
+.title-block {
+  @extend .plos-row;
+  position: relative;
+  background: $white;
+  min-height: rem-calc(100);
+}
+
+.signposts {
+  .noshow {
+    display: none;
+  }
+
+  .anime-hide {
+     opacity: 0;
+  }
+  @include plos-grid-column(160, $gutter: none);
+  @extend .inline-list;
+  margin: $pad-default $pad-default $pad-default 0;
+  float: right;
+  text-align: center;
+  height: rem-calc(159);
+  opacity: 1;
+  @include single-transition(opacity);
+
+  li {
+    @extend %brand-shaded-blocks;
+    float: left;
+    border-right: 1px solid $white;
+    border-bottom: 1px solid $white;
+    padding: $pad-default $pad-xsmall;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0;
+    font-weight: bold;
+    font-size: $txt-size-medium-large;
+    color: $grey-dark;
+    width: rem-calc(80);
+    height: rem-calc(80);
+
+    .tools {
+
+      a {
+        font-size: $txt-size-xsmall;
+        color: $grey-dark;
+        padding: $pad-xsmall;
+       // @include single-transition(background-color);
+        transition-property: all;
+        transition-duration: .5s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+
+        &.show-tip {
+          background-color: $plos-default;
+          border-radius: $border-radius-default;
+          color: $white;
+        }
+        &:hover {
+          background-color: $plos-default;
+          border-radius: $border-radius-default;
+          color: $white;
+          text-decoration: underline;
+        }
+      }
+
+      p {
+
+        background-color: $plos-default;
+        border-radius: $border-radius-default;
+        width: rem-calc(280);
+        position: absolute;
+        text-align: left;
+        z-index: map-get($zindex, overlay);
+        padding: $pad-xsmall;
+        display: none;
+
+        > a {
+          color: $white;
+          padding: 0;
+          display: block;
+        }
+      }
+
+      p.saves-tip {
+        top: rem-calc(93);
+        right: rem-calc(118);
+      }
+      p.citations-tip {
+        top: rem-calc(93);
+        right: rem-calc(30);
+        .scopus, .crossref {
+          display: none;
+        }
+      }
+      p.views-tip {
+        top: rem-calc(174);
+        right: rem-calc(118);
+      }
+      p.shares-tip {
+        top: rem-calc(174);
+        right: rem-calc(36);
+      }
+    }
+  }
+    .unavailable {
+      width: rem-calc(160);
+      border-right: 0;
+      border-bottom: 0;
+      font-size: $txt-size-xsmall;
+      font-weight: normal;
+      text-align: right;
+      color: $grey-med-dark;
+    }
+    #loadingMetrics {
+      @extend .unavailable;
+      position: relative;
+      height: rem-calc(160);
+
+      text-align: center;
+      p {
+        padding-top: rem-calc(75);
+        font-size: $txt-size-medium-large;
+      }
+    }
+    #tooSoon {
+      @extend .unavailable;
+      padding: rem-calc(25) $pad-small $pad-small $pad-medium;
+    }
+    #metricsError {
+      @extend .unavailable;
+      padding: rem-calc(105) $pad-small $pad-small $pad-default;
+      background: $grey-light;
+      height: rem-calc(160);
+    }
+  }
+
+.article-meta {
+  //  padding-right: $pad-default;
+  @extend .hide-for-print;
+}
+
+.classifications {
+  @include plos-grid-column(755, $gutter: none);
+  @extend %txt-transform;
+  margin-top: $pad-smallish;
+
+  > p {
+    font-size: $txt-size-xxxsmall;
+    display: inline-block;
+    padding-left: $pad-smallish;
+    line-height: $txt-size-large;
+  }
+
+  .license-short {
+    background: image-url('icon.oa.gif') no-repeat 0 3px;
+    padding-right: $pad-small;
+    font-family: $font-face-fancy;
+  }
+
+  .peer-reviewed {
+    background: image-url('icon.pr.gif') no-repeat 0 3px;
+    font-family: $font-face-fancy;
+  }
+
+  .type-concern-retraction {
+    color: $clr-warning;
+
+    &:before {
+      @extend .icon-alert;
+      font-size: rem-calc(15);
+      margin-right: 3px;
+      line-height: rem-calc(15);
+    }
+  }
+
+  .type-correction {
+    &::before {
+      content: '';
+      @extend .icon-correction;
+    }
+
+  }
+
+  .article-type {
+    margin-top: $pad-xsmall;
+
+    > p {
+      vertical-align: bottom;
+      line-height: $txt-size-xxxsmall;
+      font-size: $txt-size-xxxsmall;
+    }
+  }
+}
+
+
+
+
+.article-title-etc {
+  @include plos-grid-column(755, $gutter: none);
+  margin-top: $pad-small;
+
+  h1 {
+    font-size: $txt-size-27large; // TEMP-PROD: needs to be 26px or 28px
+    line-height: normal;
+
+    i, italic, named-content {
+      font-style: italic;
+    }
+  }
+  .date-doi {
+    @include clearfix();
+    @extend .text-article-intro;
+    margin: 0;
+    margin-bottom: ($pad-default + $pad-xsmall);
+
+    li {
+      float: left;
+      margin: 0 $pad-small;
+
+      &:first-child {
+        margin: 0 $pad-small 0 0;
+        padding-left: 0;
+        list-style-type: none;
+      }
+    }
+  }
+}
+
+.float-title {
+  position: fixed;
+  left: 0;
+  visibility: hidden;
+  top: -100px;
+  width: 100%;
+  height: rem-calc(49);
+  padding: rem-calc(7 $pad-small); // TEMP-PROD: normalize 7 to $pad-small;
+  border-bottom: 1px solid $grey-med-light;
+  background-color: $white;
+  z-index: map-get($zindex, titleTopFixed);
+
+  #floatAuthorList {
+    @extend .hide-for-print;
+    height: rem-calc(16);
+    width: rem-calc(770);
+    @extend .inline-list;
+    margin: 0;
+    padding-left: 0;
+
+    li {
+      padding-right: rem-calc(3);
+      margin-left: 0;
+      line-height: rem-calc(16);
+      font-size: rem-calc($txt-size-xsmall);
+    }
+
+    li:last-child {
+      padding-right: 0;
+    }
+  }
+}
+
+.topVisible {
+  visibility: visible;
+  top: 0;
+  transition-property: top;
+  transition-duration: .6s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: map-get($zindex, topvisible);
+
+  .float-title-inner {
+    @include plos-grid-column(770, $gutter: left, $gutter-width: 18px);
+
+    h1 {
+      @include truncated();
+      font-size: $txt-size-medium;
+      font-weight: bold;
+      font-family: $font-face-plain;
+      line-height: rem-calc(16);
+      margin: rem-calc(2) 0;
+
+      i, italic, named-content {
+        font-style: italic;
+      }
+    }
+  }
+
+  .logo-close {
+    @include plos-grid-column(160, $gutter: none);
+    padding: 0 $pad-small $pad-xsmall 0;
+    display: block;
+    float: right;
+    text-align: right;
+    cursor: pointer;
+
+    img {
+      margin-right: $pad-smallish;
+    }
+
+    .close-floater {
+      @extend .closer-brand;
+      text-indent: 9999px;
+    }
+  }
+}
+
+// TABS
+
+.article-tabs {
+  @extend .hide-for-print;
+  display: table;
+  table-layout: fixed;
+  margin-bottom: $pad-default;
+  width: 100%;
+  margin-left: 0;
+
+  .tab-title {
+    margin-left: 0;
+    display: table-cell;
+    float: none;
+    position: static;
+
+    a.article-tab-1 {
+      background: $tabs-base-color;
+    }
+    a.article-tab-2 {
+      background: lighten($tabs-base-color, 10%);
+    }
+    a.article-tab-3 {
+      background: lighten($tabs-base-color, 20%);
+    }
+    a.article-tab-4 {
+      background: lighten($tabs-base-color, 30%);
+    }
+    a.article-tab-5 {
+      background: lighten($tabs-base-color, 40%);
+    }
+
+    a {
+      display: block;
+      height: 75px;
+      padding: $temp-pad-tabs;  // TEMP-PROD: use $pad-small;
+      border-right: 1px solid $white;
+      font-weight: bold;
+      color: $white;
+
+      &:hover {
+        background: $plos-default;
+        color: $white;
+      }
+    }
+    &.active a {
+      position: relative;
+      @extend %brand-background;
+      height: 83px;
+      font-weight: bold;
+      font-family: $font-face-plain;
+
+      &:after{
+        content:"\f103";
+        position: absolute;
+        bottom: $pad-xsmall;
+        left: rem-calc(8);
+        @extend .fa;
+        font-size: $txt-size-medium-large;
+      }
+      &:hover {
+        @extend %brand-background;
+        cursor: inherit;
+      }
+    }
+  }
+}
+
+.author-list{
+  @extend .text-article-intro;
+  @extend .inline-list;
+  overflow: visible;
+  margin-left: 0;// needed t overwrite the inline-list
+  margin-bottom: $pad-small;
+
+  li {
+    position: relative;
+    margin-left: -($pad-highlight * 1.5);  // needed to overwrite the inline-list
+
+    &.active{
+      a:hover{text-decoration: none;}
+    }
+
+    &[data-js-toggle='toggle_trigger'] a{
+      color: $clr-highlight;
+    }
+
+    > a, > span{
+      display: inline-block;   // needed to overwrite the inline-list
+      padding: $pad-highlight $pad-highlight-x; //TODO line-height;
+    }
+
+  }
+  .contribute{
+    @extend .icon-author-contribute;
+  }
+
+  .rel-footnote {
+    @extend .icon-author-footnotes;
+  }
+
+  .email {
+    @extend .icon-author-address;
+  }
+
+  ///print styles
+  [data-js-toggle="toggle_trigger"], [data-js-toggle="toggle_add"]{
+    @extend .hide-for-print;
+  }
+  [data-js-toggle="toggle_target"]{
+    @extend .show-for-print;
+  }
+}
+
+.author-info{
+  @extend .pill-small;
+  padding-right: ($pad-default);
+  width: rem-calc(450);
+  top: rem-calc($txt-size-default + 2);   // need to make this a tad more dynamic.
+  height: auto;
+  position:absolute;
+  margin-top: $pad-small;
+  opacity: 0;
+  @include single-transition(opacity);
+  z-index: -1;
+
+  p{
+    border-top: rem-calc(2) solid $grey-med;
+    padding: $pad-small 0;
+    &:first-child {
+      border-top: none;
+    }
+  }
+
+  .email, .rel-footnote {
+    @include icon-offscreen;
+    margin-right: $icon-space;
+  }
+}
+
+.author-list .active {
+  a, a:hover { color: $white; }
+
+  .author-name {
+    @include rounded-pill($padding: $pad-highlight $pad-highlight-x,$hover: false);
+  }
+
+  .author-info {
+    opacity: 1;
+    z-index: map-get($zindex, dropdown);
+  }
+
+  .close {
+
+    @extend .closer;
+    position: absolute;
+    top: $pad-xsmall;
+    right: $pad-xsmall;
+  }
+}
+
+.article-type {
+  height: auto;
+  width: auto;
+  display:table;
+  @include js-tooltip-container();
+}
+
+.type-desc{
+  @include tooltip();
+  @include js-tooltip-target($margintop: rem-calc(35));
+  left: 0;
+
+  p{
+    color: $clr-tooltip-text;
+    text-transform: none;
+
+    a{
+      @extend %link-text-white;
+    }
+  }
+}
+
+.article-type-tooltip{
+  @include tooltip-trigger($outside-box: yes);
+  font-family: $font-face-plain;
+  font-size: $txt-size-xxxsmall;
+}
+
+
+
+// RIGHT COLUMN STYLES
+
+.dload-menu {
+  @include clearfix;
+  padding-bottom: 5px;
+
+  div {
+    display: inline;
+    float: left;
+    line-height: rem-calc(35);
+    font-size: $txt-size-mediumish;
+    font-weight: bold;
+    color: $white;
+
+    &:hover {
+      background: $plos-default;
+    }
+  }
+
+  .dload-pdf {
+    @include rounded-pill($background: $clr-body-text, $padding: rem-calc(0 11), $border-radius: 5px 0 0 5px, $hover: false);
+
+    &:hover {
+      background: $plos-default;
+    }
+
+    a {
+      color: $white;
+    }
+  }
+
+  .dload-hover {
+    @include rounded-pill($background: $clr-body-text, $padding: rem-calc(0 8 0 11), $border-radius: 0 5px 5px 0, $hover: false);
+    @include js-tooltip-container();
+    @extend .icon-caret-down;
+
+    &:hover {
+      cursor: pointer;
+      background: $plos-default;;
+    }
+  }
+
+  .shim {
+    height: rem-calc(100);
+    display: block;
+    position: absolute;
+    left: -50px;
+    top: -10px;
+    width: 80px;
+
+    &:hover {
+      background: transparent !important;
+    }
+  }
+}
+
+.dload-xml {
+  @extend .tooltip-aside;
+  @include js-tooltip-target(rem-calc(40));
+  opacity: 1;
+  z-index: map-get($zindex, dropdown);
+  left: -127px;
+  cursor: default;
+
+  a { //firefox
+    font-family: $font-face-plain;
+  }
+}
+
+.print-article{
+  @extend .button-big;
+  @include js-tooltip-container;
+  @include plos-grid-column(77, $gutter:right, $gutter-width: 5px);
+  cursor: pointer;
+}
+
+.print-options {
+  @extend .tooltip-aside;
+  @include js-tooltip-target(rem-calc(40));
+  left: 0;
+  opacity: 1;
+  z-index: map-get($zindex, dropdown);
+}
+
+.aside-container {
+  @include clearfix();
+  width: rem-calc(160);
+  margin-bottom: $pad-default;
+
+  h3 {
+    font-size: $txt-size-medium;//$txt-size-h3;
+    font-family: $font-face-plain;
+    font-weight: bold;
+    line-height: rem-calc(17); // TEMP PROD: use 18px;
+    border-bottom: 1px solid #dedede;
+    padding-bottom: $pad-small;
+    margin-bottom: rem-calc(8); // TEMP PROD: use 10px;
+  }
+
+}
+
+.share-article {
+  @extend .button-big;
+  @include js-tooltip-container;
+  @include plos-grid-column(77, $gutter: none);
+  cursor: pointer;
+}
+
+.share-options {
+  @extend .tooltip-aside;
+  @include js-tooltip-target(rem-calc(40));
+  padding-left: $pad-small;
+  opacity: 1;
+  z-index: map-get($zindex, dropdown);
+  left: -82px;
+  list-style-type: none;
+
+  li {
+    list-style-position: outside; // firefox
+    list-style-type: none;
+
+    a img {
+      width: 16px;
+      height: 16px;
+      margin-right: rem-calc(3);
+      margin-bottom: rem-calc(4);
+    }
+  }
+}
+
+
+.crossmark-container {
+  @extend .aside-container;
+  margin-bottom: $pad-xsmall;
+
+  img {
+    padding: $pad-small 0;
+    display: block;
+  }
+}
+
+.article #crossmark-tooltip-130 {
+  z-index: map-get($zindex, crossmark-tooltip);
+}
+
+// overrides for crossmark's jquery ui
+.crossmark-ui-dialog .ui-dialog-titlebar-close {
+  &:focus {
+    outline: none !important;
+  }
+}
+.ui-button.ui-button-icon-only.ui-dialog-titlebar-close {
+  border: none !important;
+  border: 0 !important; //ie 9
+}
+
+body.article .ui-widget-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  background: transparent url('http://crossmark.crossref.org/images/bg_overlay.png') top left repeat;
+  opacity: .3;
+  filter: Alpha(Opacity - 30);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  z-index: map-get($zindex, titleTopFixed);
+}
+// end overrides for crossmark's jquery ui
+
+#collectionList {
+  list-style-type: none;
+  margin-left: 0;
+  li a {
+    @include link-text($plos-default, underline);
+    font-size: $txt-size-xsmall;
+  }
+}
+
+.related-articles-container {
+  @extend .aside-container;
+
+  ul {
+    list-style: none;
+    margin-left: 0;
+
+    li {
+      margin-bottom: rem-calc(12);// TEMP PROD: use 10 or 15;
+
+      a {
+        @extend %link-text-default;
+        font-size: $txt-size-xsmall;
+      }
+    }
+  }
+
+}
+
+.skyscraper-container {
+  @extend .aside-container;
+
+  .title {
+    @extend .header-allcaps-smallest;
+    margin-bottom: $pad-xsmall;
+    text-align: center;
+    color: $grey-tinytext; // TEMP PROD: change to grey-med-light
+  }
+}
+
+.subject-areas-container {
+  @extend .aside-container;
+  position: relative;
+
+  h3 #subjInfoText {
+    position: absolute;
+    top: 3px;
+    left: -215px;
+    @include tooltip($width: 375);
+    padding-right: $pad-small;
+    font-size: $txt-size-xsmall;
+    font-weight: 100 !important;
+    line-height: $txt-size-medium-large;
+    z-index: map-get($zindex, footer);  //had to lower the trigger, so also lower the target
+    display: none;
+
+    &:hover {
+      display: block;
+    }
+
+    a {
+      @extend %link-text-white;
+      font-weight: bold;
+    }
+  }
+
+  h3 #subjInfo {
+    @include circle;
+    color: $white;
+    display: inline-block;
+    font-size: $txt-size-xxsmall;
+    float: right;
+    position: absolute;
+    top: 3px;
+    right: 1px;
+    z-index: map-get($zindex, header); //share dropdown had this content on it; had to lower this one.
+    padding-top: 1px;
+
+    &:hover {
+      & + #subjInfoText {
+        display: block;
+      }
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    margin-left: 0;
+
+    li {
+      @include clearfix;
+      list-style-type: none;
+      padding: 0 0 4px;  // TEMP PROD: change to 5px;
+      line-height: normal;
+      position: relative;
+
+      .taxo-term {
+        @extend .button;
+        width: auto;
+        float: left;
+        //the next three elements are for truncation. width is needed and is being set with js
+        //because the width needs to be auto when truncation isn't needed
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .taxo-tooltip {
+        @include tooltip($width: 160px);
+        position: absolute;
+        top: 0;
+        right: 0;
+        visibility: hidden;
+        opacity: 1;
+        @include single-transition(opacity);
+        z-index: map-get($zindex, crossmark-tooltip);
+
+        &.activate {
+          visibility: visible;
+        }
+        strong {
+          display: block;
+        }
+
+        p {
+          font-size: $txt-size-xxsmall;
+          line-height: $pad-default;
+        }
+
+        button {
+          margin-top: $pad-small;
+          margin-right: $pad-xsmall;
+          line-height: $txt-size-xlarge;
+          background-color: $white;
+          border: none;
+          border-radius: 4px;
+          font-size: $txt-size-xxsmall;
+          font-weight: bold;
+          color: $plos-default;
+          cursor: pointer;
+        }
+
+        p.taxo-confirm {
+          display: none;
+          margin-top: $pad-xsmall;
+          line-height: rem-calc(75);
+        }
+      }
+
+      .taxo-flag {
+        margin-top: $pad-xsmall;
+        margin-left: rem-calc(4);
+        display: inline-block;
+        float: right;
+        width: rem-calc(16);
+        height: rem-calc(16);
+        background: image-url('icon.taxonomy.target.png') no-repeat 0 0;
+        cursor: pointer;
+
+        &:hover, &.flagged {
+          background-position: 0 -16px;
+        }
+      }
+
+    }
+  }
+}
+
+.comments-container {
+  @extend .aside-container;
+
+  ul {
+    margin-left: 0;
+    list-style-type: none;
+
+    li {
+      margin-left: 0;
+      padding-bottom: rem-calc(12);
+      font-size: $txt-size-xsmall;
+    }
+
+    a {
+      @extend %link-text-default;
+      display: block;
+    }
+  }
+}
+
+.twitter-container {
+  @extend .aside-container;
+  display: none;
+
+  h3 {
+    background: image-url('icon.twtr.20.png') no-repeat 0 0;
+    padding-left: $pad-default + $pad-xsmall;
+    border: none;
+    padding-bottom: 0;
+    margin-bottom: $pad-xsmall;
+    font-size: $txt-size-xsmall !important;
+  }
+
+  #tweetList {
+    list-style-type: none;
+    margin-left: 0;
+
+    li {
+      border-top: 1px solid #dedede;
+      margin-bottom: $pad-small;
+      padding-top: $pad-small;
+      font-size: $txt-size-xsmall;
+
+      .tweet-info {
+        a {
+          color: $clr-body-text;
+          position: relative;
+          @include clearfix;
+        }
+
+        img {
+          display: inline;
+          float: left;
+          margin-bottom: $pad-xsmall;
+        }
+
+        .tweetDate {
+          display: inline;
+          float: right;
+        }
+
+        .tweetUser {
+          clear: both;
+
+          strong {
+            font-weight: bold;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+        span {
+          font-size: $txt-size-xxxsmall;
+        }
+      }
+    }
+  }
+
+  .more-tweets, .placeholderPic {
+    display: none;
+  }
+
+  .load-more, .view-all {
+    @extend %link-text-default;
+    font-family: $font-face-fancy;
+    font-size: $txt-size-large;
+    display: none;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .load-more span {
+    @extend .icon-caret-down;
+    display: inline-block;
+    padding-left: $pad-xsmall;
+    width: $pad-small;
+    color: $plos-default;
+  }
+}
+
+#tweetActions {
+  list-style-type: none;
+  margin-left: 0;
+
+  a {
+    @include link-text($grey-med, underline);
+    visibility: hidden;
+    padding-left:0;
+    padding-right: $pad-small;
+    display: inline;
+
+    div {
+      background: image-url('sprite.twitter.actions.png') no-repeat 0 0;
+      width: rem-calc(17);
+      height: rem-calc(15);
+      display: inline-block;
+    }
+  }
+  .tweet-reply div {
+    background-position: 0 0;
+  }
+  .tweet-reply:hover div {
+    background-position: -16px 0;
+  }
+  .tweet-retweet div {
+    background-position: -80px 0;
+  }
+  .tweet-retweet:hover div {
+    background-position: -96px 0;
+  }
+  .tweet-favorite {
+    display: block;
+    div {
+      background-position: -32px 0;
+    }
+  }
+  .tweet-favorite:hover div {
+    background-position: -48px 0;
+  }
+
+  &:hover {
+    a {
+      visibility: visible;
+    }
+  }
+
+}
+
+@media print {
+
+  .article-body {
+    width: 95%;
+  }
+
+  .title-block {
+    margin-top: $pad-xsmall;
+
+    &:before {
+      content: image-url('logo.png') !important;
+    }
+
+    h1 {
+      padding-top: $pad-default;
+    }
+  }
+}

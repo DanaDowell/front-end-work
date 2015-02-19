@@ -1,0 +1,525 @@
+
+/*doc
+---
+title: small components
+name: small components
+category: components
+---
+
+##pill
+<p class="pill">I am a pill</p>
+`@extend .pill`
+<p class="pill-small">I am a small pill</p>
+`@extend .pill-small`
+<p class="button-big">I am button </p>
+`@extend .button-big`
+<p class="button">I am hoverable button</p>
+`@extend .button`
+*/
+
+@mixin rounded-pill($background: $clr-highlight, $padding: $pad-default, $border-radius: $border-radius-default, $hover-color: $clr-link-hover, $hover: true) {
+  background: $background;
+  padding: $padding;
+  border-radius: $border-radius;
+  color: $clr-btn-text;
+  display: inline-block;
+
+  @if $hover == true {
+    &:hover {
+      background: $clr-link-hover;
+    }
+  } @else {
+  }
+
+}
+//extend .pill if using defaults in rounded-pill
+.pill {
+  @include rounded-pill();
+}
+
+.pill-small {
+  @include rounded-pill($padding: $pad-small,  $hover: false);
+}
+
+// to be used with tooltip_hover.js
+.button-big{
+  @include rounded-pill($background: $clr-body-text, $padding: 0 $pad-small);
+  line-height: rem-calc(35px);
+  font-weight: bold;
+  font-size: $txt-size-mediumish;
+  text-align: center;
+  &.highlighted{
+     background-color: $clr-highlight;
+  }
+}
+
+.button {
+  @extend %brand-background-hover;
+  border-radius: 4px;     //matches production
+  width: auto;
+  padding: $pad-xsmall;
+  height: auto;
+  line-height: rem-calc(17);
+  font-size: $txt-size-xsmall;
+  font-weight: bold;
+  color: $white;
+}
+
+@mixin circle($circumference: 18, $background: $plos-default) {
+  width: $circumference+px;
+  height: $circumference+px;
+  background: $background;
+  border-radius: ($circumference/2)+px;
+  text-align: center;
+}
+/*doc
+---
+title: blocks
+name: blocks
+category: components
+---
+
+Blocks are essentially boxes with some defaults, such as color and bottom margin. You can either use the extendable classes below or the mixin if you need more flexibility. if you are using a certain style over and over feel free to add a extendable class of your own.
+
+### Extendable Classes
+We created extendable classes for some commonly used blocks.
+
+example | extension
+--------|----------
+<p class="block">I am a block - usually on the homepage</p> | `@extend .block`
+<div class="padded-example" style="color:black"><p class="block-noshadow">I am a block - with no shadow </p></div> | `@extend .block-noshadow`
+<p class="block-card ">I am a block - with padding and no border radius</p> | `@extend .block-card`
+
+###Mixin
+We also have a mixin you can use to create your own blocks:
+`@include blocks();`
+
+variable  | result   | default
+------------------------------------------| ----------------- | ---------
+`$radius: top` | default radius on the top corners of block   |  yes
+`$radius: none` | no radius  |
+`$radius: all` | default radius on all corners of block   |
+`$padding: default` | block has a padding of `$pad-small` - 10px   |   yes
+`$padding: none` |  block has no padding |
+`$padding: NUMBER` | allows you to set the number padding - use variables |
+`$color: COLOR` | sets the background color   |   `$white`
+
+*/
+
+@mixin blocks($color: $white, $radius: top, $padding: default, $shadow: default) {
+  // set block radius
+  @if $radius == top {
+    @include border-top-radius();
+  } @if $radius == none {
+     // no radius
+  } @if $radius == all {
+    border-radius: $border-radius-default;
+}
+  // set block padding
+  @if $padding == default {
+    padding: $pad-small;
+  } @else if $padding == none{
+    padding: 0;
+  } @else {
+    padding: $padding;
+}
+  // set block shadow
+  @if $shadow == default{
+    @include single-box-shadow();
+  } @if $shadow == none{
+    // no shadow
+  }
+  margin-bottom: $grid-gutter;
+  background: $color;
+}
+
+.block{
+  @include blocks();
+}
+.block-noshadow{
+  @include blocks($shadow: none);
+
+}
+.block-card {
+  @include blocks($radius: none, $padding: none);
+}
+
+
+///PLACEHOLDER STYLES
+
+@mixin stub() {
+  background-color: $grey-med-light;
+  color: $white;
+}
+
+// jcarousel styles - from jquery -
+/*
+This is the visible area of you carousel.
+Set a width here to define how much items are visible.
+The width can be either fixed in px or flexible in %.
+Position must be relative!
+*/
+.jcarousel {
+  position: relative;
+  overflow: hidden;
+}
+
+/*
+This is the container of the carousel items.
+You must ensure that the position is relative or absolute and
+that the width is big enough to contain all items.
+*/
+.jcarousel ul {
+  width: 20000em;
+  position: relative;
+
+  /* Optional, required in this case since it's a <ul> element */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+These are the item elements. jCarousel works best, if the items
+have a fixed width and height (but it's not required).
+*/
+.jcarousel li {
+  /* Required only for block elements like <li>'s */
+  float: left;
+}
+
+// small carousel
+.carousel-wrap.small {
+  $icon-height: rem-calc(30);
+  $carousel-width: rem-calc(306);
+  // TODO PG-width is set in home.scss
+  @extend %brand-shading;
+  @extend .block-card;
+  margin-right: $pad-default;
+  position: relative;
+  .block-header {
+    @extend %brand-header;
+  }
+  .carousel {
+    li {
+      width: $carousel-width;
+      padding: $pad-default;
+      height: 145px;
+      h3 {
+        @extend h2;
+        @extend %link-text-body;
+      }
+      p {
+        font-size: rem-calc($txt-size-medium);
+      }
+    }
+  }
+  .carousel-control {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    width: 120px;
+    margin-left: -50px;
+    .jcarousel-prev,
+    .jcarousel-next {
+      @extend .fa;
+      font-size: $icon-height;
+      &:hover {
+        @extend .fa-inverse;
+      }
+    }
+    .jcarousel-prev {
+      @extend .fa-chevron-circle-left;
+    }
+    .jcarousel-next {
+      @extend .fa-chevron-circle-right;
+    }
+    .numbers {
+      @extend %small-italic;
+      color: $grey-med-dark;
+      display: inline-block;
+      padding: 0 $pad-xsmall;
+      vertical-align: top;
+      span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: $icon-height;
+        height: $icon-height;
+      }
+    }
+  }
+}
+
+//font awesome icon: arrow after link
+//use with ::after
+//example: .more-link::after { @extend .more-icon }
+
+/*doc
+---
+title: icons
+name: icons
+category: typography
+---
+
+We use the fantastic FontAwesome library for most icons. There are a few manipulation functions, found in the documentation.
+For icons after text:
+use  with `::after` example: `.more-link::after { @extend .more-icon }`
+
+example | extension
+--------|----------
+<a class="example-more-link">more</a>| `@extend .more-icon`
+<p class="icon-twitter"> twitter </p> | `@extend .icon-twitter`
+<p class="icon-facebook"> facebook</p> | `@extend .icon-facebook`
+<p class="icon-email"> email</p> | `@extend .icon-email`
+
+*/
+
+.more-icon {
+  // need to use content instead of @extend .fa-chevron-circle-right with ::after;
+  content: '\f138';
+  @extend .fa;
+  @extend .fa-inverse;
+  @extend %brand-color;
+  padding-left: rem-calc(3);
+}
+
+.icon-fa {
+  @extend .fa;
+  line-height: ($txt-size-xxlarge * 2);
+  font-size: $txt-size-xxlarge;
+}
+
+.icon-twitter {
+  @extend .icon-fa;
+  @extend .fa-twitter;
+  content: '\f099';
+}
+
+.icon-facebook {
+  @extend .icon-fa;
+  @extend .fa-facebook;
+  content: '\f09a';
+}
+
+.icon-rss {
+  @extend .icon-fa;
+  @extend .fa-rss;
+  content: '\f09e';
+}
+
+.icon-email {
+  @extend .icon-fa;
+  @extend .fa-envelope-o;
+  content: '\f003';
+}
+.icon-plus {
+  @extend .icon-fa;
+  @extend .fa-plus-square;
+  line-height: normal;
+}
+.icon-close {
+  @extend .icon-fa;
+  line-height: normal;
+  content: '\f00d';
+}
+.icon-alert{
+  @extend .icon-fa;
+  @extend .fa-exclamation-triangle;
+  color: $clr-warning;
+}
+.icon-caret-down {
+  @extend .icon-fa;
+  @extend .fa-caret-down;
+  font-size: $txt-size-medium-large;
+  line-height: rem-calc(35);  // .fa-etc default to 44
+}
+
+.aria-text {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+/// use with span
+// $width and $height use rem calc so only pixels are needed, $width, $height, $img are required  .
+@mixin icon-image($width, $height,$img, $offset: 0 0, $align: middle) {
+  background: image-url($img) no-repeat $offset;
+  vertical-align: $align;
+  display: inline-block;
+  width: rem-calc($width);
+  height: rem-calc($height);
+}
+
+@mixin icon-offscreen {
+  text-indent: -9999px;
+}
+
+$icn-tiny-width: 15;
+$icn-tiny-height: 13;
+$icn-tiny-align: middle;
+
+.icon-author-contribute {
+  @include icon-image($icn-tiny-width, $icn-tiny-height, 'icon.author.co.gif', $align: $icn-tiny-align );
+}
+
+.icon-author-footnotes {
+  @include icon-image($icn-tiny-width, $icn-tiny-height, 'icon.author.grp.png', $align: $icn-tiny-align );
+}
+.icon-author-address {
+  @include icon-image($icn-tiny-width, $icn-tiny-height, 'icon.author.email.png', $align: $icn-tiny-align );
+}
+.icon-correction {
+  @include icon-image($icn-tiny-width, 15, 'icon.correction.png', $align: $icn-tiny-align );
+}
+.icon-expand {
+  @include icon-image(25, 25, 'icon.sprite.expand.png', 0 0, middle);
+  &:hover {
+    background-position: 0 -25px;
+    cursor: pointer;
+  }
+}
+
+
+.closer {
+  @include icon-image(25, 25,'icon.sprite.close.png', 0 -24px);
+  color: $white;
+  @include icon-offscreen;
+
+}
+
+.closer-brand {
+  @extend .closer;
+  @extend %brand-background;
+  border-radius: $border-radius-small;
+
+  .plosone & {  background-position: 0 0;}
+}
+.action-label {
+  display:inline-block;
+  float: left;
+  margin-right: rem-calc(4);
+  @extend %brand-background;
+  border-radius: $border-radius-smaller;
+}
+// for one-line truncates 
+@mixin truncated ($width: 100%) {
+  width: $width;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/// for regular text that gets highlighted. For text that is already highlighted in some way you can
+// just use the sass code that reflects that element.
+
+
+@mixin tooltip-trigger( $padding: $pad-xsmall, $outside-box:none){
+  padding: $padding;
+  @include single-transition(background-color);
+  @if $outside-box == yes {
+    padding-left: 0;
+  }
+  .active &, &.highlighted,  .highlighted &{
+    a, a:hover{color: $white;}
+    @include rounded-pill( $padding: $padding, $hover: false);
+    @if $outside-box == yes {
+      margin-left: -$padding;
+    }
+
+    .author-name{
+      @include rounded-pill($padding: rem-calc(2 4),$hover: false);
+    }
+
+  }
+}
+
+// creates a standard tooltip blue box etc....
+@mixin tooltip($width: 320, $outside-box:none, $tooltip-padding: $pad-small){
+  @include rounded-pill($padding: $tooltip-padding, $hover: false);
+  padding-right: $pad-default;   //TODO put padding in closer
+  width: rem-calc($width);
+
+  .close{
+    @extend .closer;
+    position: absolute;
+    top: $pad-xsmall;
+    right: $pad-xsmall;
+  }
+   margin-left: 0;
+}
+
+@mixin arrow-bottom($arrow-size: 8, $arrow-color:$plos-default) {&:after {
+  content: '\A';
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-top-color: $arrow-color;
+  border-width: rem-calc($arrow-size);
+  margin-left: -rem-calc($arrow-size);
+}}
+
+ // this is for a tooltip with a bullet list.
+
+.tooltip-aside{
+  @include tooltip($width: 160, $tooltip-padding: rem-calc(15 10 10 20));
+  display:block;
+
+  li {
+    font-size: $txt-size-medium-large;
+    font-weight: bold;
+    text-align: left;
+    list-style-type: disc;
+    list-style-position: inside;
+    padding-bottom: rem-calc(8);
+
+    a {
+      @extend %link-text-body;
+      font-weight: bold;
+      color:$white;
+
+      &:hover {
+        color: $clr-tooltip-text;
+      }
+    }
+
+  }
+}
+
+
+//// for JS widgets - these are to separate
+
+@mixin js-tooltip-container{
+  position:relative;
+}
+@mixin js-tooltip-target($margintop: $pad-default){
+  top: 0;
+  height: 0;
+  position: absolute;
+  margin-top: $margintop;   /// margin to prevent blinking between the trigger and the tooltip
+  opacity: 0;
+  visibility: hidden;
+  z-index: map-get($zindex, invisible);
+  @include single-transition(opacity);
+  &.visible{
+    opacity: 1;
+    z-index: map-get($zindex, dropdown);
+    visibility: visible;
+    height:auto;
+  }
+}
+
+// js utilities
+.pos-right {   // used in tooltip.js
+  right:0
+}
+
+ .shim {
+
+   height: 50px;   //TODO - make this  dynamic
+   position: absolute;
+   width: 100%;
+ }

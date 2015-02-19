@@ -1,0 +1,12 @@
+/*
+ * This is the centralized import file for the main screen.css.
+*/
+@charset "UTF-8";
+@import "global-imports";
+@import "sections/footer";
+@import "sections/header";
+@import "sections/article-lightbox";
+@import "pages/home";
+@import "pages/static";
+@import "pages/article";
+@import "pages/article-body";

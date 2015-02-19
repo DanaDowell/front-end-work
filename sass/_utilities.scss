@@ -1,0 +1,330 @@
+/*doc
+---
+title: utilities.scss
+name: utilities
+category: files
+---
+  this file has wombat specific mixins and extensible styles
+  and ties in with plos-themes and setting each journal color
+*/
+
+
+/*doc
+---
+title: interaction and animation utilities
+name:  animation
+category: utilities
+---
+
+example | extension
+--------|----------
+hide something | data-visibility= 'none']
+
+### z-index - rather than just making up a z-index we use this map so that we dont' have any surprises when elements appear on top of each other.
+
+
+type | value
+--------|----------
+  modal     | '9000'
+  overlay   | '8000'
+  topvisible| '7000'
+  crossmark-tooltip| '6999'
+  dropdown  | '6998'
+  header    | '6000'
+  footer    | '5000'
+  invisible | '-1'
+
+```sass_example
+.header {
+  z-index: map-get($zindex, header);
+}
+ ```
+
+
+*/
+
+
+// hide elements so we dont' get a flash of unstyled content
+p,div,span,li,ul, ol{
+  [data-visibility= "none"]{display:none;
+  }
+}
+
+[data-js-tooltip=tooltip_trigger]:focus{outline: 0;}
+
+
+$zindex: (
+  modal     : 9000,
+  overlay   : 8000,
+  topvisible: 7000,
+  crossmark-tooltip: 6999,
+  dropdown  : 6998,
+  header    : 6000,
+  footer    : 5000,
+  invisible : -1,
+
+);
+
+//compass overides
+
+$default-border-radius: $border-radius-default;
+// that name space convention in compass just really bugs me.
+
+// color mixin:
+@mixin highlight-color($clr-highlight: $plos-default) {
+  color: $clr-highlight;
+}
+
+@mixin highlight-background($clr-highlight: $plos-default,
+$clr-highlight-hover: $plos-default,
+$clr-highlight-text: $white) {
+  background: $clr-highlight;
+  color: $clr-highlight-text;
+  &:hover {
+    background: $clr-highlight-hover;
+  }
+}
+
+@mixin highlight-border($clr-highlight: $plos-default, $width: 6px, $position: bottom) {
+
+  @if $position == bottom {
+    border-bottom: $width solid $clr-highlight;
+  } @else if $position == left {
+    border-left: $width solid $clr-highlight;
+  } @else if $position == right {
+    border-left: $width solid $clr-highlight;
+  } @else if $position == top {
+    border-top: $width solid $clr-highlight;
+  }
+}
+
+// color extensibles
+
+/*doc
+---
+title: colors
+name: color
+category: utilities
+---
+
+`brand color` refers to the journal colors
+
+`highlight color` refers to the default highlight color - in our case it is `plos-blue`
+
+example | extension
+--------|----------
+<p class="example-bg-dark">i have a dark background</p> | `@extend %bg-dark`
+<p class="example-highlight-color">my text is the highlight color</p> | `@extend %highlight-color`
+<a class="example-highlight-background">i have a highlighted background - hover over me</a> | `@extend %highlight-background`
+<p class="example-highlight-border">i have a highlighted border </p> | `@extend %highlight-border`
+<p class="example-brand-color">my text is the brand color</p> | `@extend %brand-color`
+<p class="example-brand-background">i have a branded background - hover over me</p> | `@extend %brand-background`
+<p class="example-brand-border">i have a branded border </p> | `@extend %brand-border`
+
+
+*/
+
+%bg-dark {
+  background: $grey-dark;
+}
+
+%highlight-color {
+  color: $clr-highlight;
+}
+
+%highlight-background {
+  background: $clr-highlight;
+  color: $clr-highlight-text;
+  &:hover {
+    background: $clr-highlight-hover;
+  }
+}
+
+%highlight-border {
+  border-color: $clr-highlight;
+}
+///////
+//branding
+/////
+
+
+
+@mixin brandcolor($setcolor: $plos-default, $shade1: $plos-default-shade1, $shade2: $plos-default-shade2, $shade3: $plos-default-shade3, $text-color: $white, $text-color-hover: $white) {
+  %more-icon {
+    color: $setcolor;
+  }
+  %brand-color {
+    color: $setcolor;
+  }
+
+  %brand-border {
+    border-color: $setcolor;
+  }
+  %brand-background {
+    background-color: $setcolor;
+    color: $text-color;
+  }
+
+  %brand-background-hover {
+    background-color: $setcolor;
+    color:  $text-color;
+    &:hover {
+      background-color: $plos-default;
+      color: $text-color-hover;
+    }
+  }
+  //color shading variations on adjacent box headers
+  %brand-shading {
+    &:first-child {
+      .block-header {
+        background-color: darken($setcolor, 18%);
+      }
+      .jcarousel-prev,
+      .jcarousel-next {
+        color: darken($setcolor, 18%);
+        &:hover {
+          color: $plos-default;
+        }
+      }
+    }
+    &:first-child + .carousel-wrap {
+      .block-header {
+        background-color: darken($setcolor, 13%);
+      }
+      .jcarousel-prev,
+      .jcarousel-next {
+        color: darken($setcolor, 13%);
+        &:hover {
+          color: $plos-default;
+        }
+      }
+    }
+  }
+
+  %brand-shaded-blocks {
+
+    &:first-child, &:nth-child(2), &:last-child {
+      background-color: $shade1;
+    }
+    &:nth-child(3) {
+      background-color: $shade2;
+    }
+    &:nth-child(4) {
+      background-color: $shade3;
+    }
+  }
+
+}
+
+// set the journal-specific colors - ps this is a good example of things that can be
+// pulled into themes or a separate scss file when the maven sass compiler is installed & working
+.plosbiology, .ploscompbiol, .plosgenetics {
+  @include brandcolor($setcolor: $plos-bio, $shade1: $plos-bio-shade1, $shade2: $plos-bio-shade2, $shade3: $plos-bio-shade3);
+}
+.plosmedicine, .plospathogens, .plosntd {
+  @include brandcolor($setcolor: $plos-med, $shade1: $plos-med-shade1, $shade2: $plos-med-shade2, $shade3: $plos-med-shade3);
+}
+
+.ploscollections, .plosclinicaltrials {
+  @include brandcolor();
+}
+
+.plosone {
+
+  @include brandcolor($setcolor: $plos-one, $shade1: $plos-one-shade1, $shade2: $plos-one-shade2, $shade3: $plos-one-shade3, $text-color: $clr-body-text, $text-color-hover: $white);
+
+  .article-content .table-download .definition-label {
+    color: $grey-dark;
+  }
+  .article-content .figure-inline-download ul li .definition-label a {
+    color: $grey-dark;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  //tabs on article lightbox
+  #fig-viewer .fv-nav li.active a {
+    color: $clr-body-text;
+  }
+  #fig-viewer-controls .fig-btn {
+    color: $grey-dark;
+
+    &.next {
+      .icn {
+        background-position: -140px 0;
+      }
+
+      &:hover .icn {
+        background-position: -140px -20px;
+      }
+    }
+
+    &.prev {
+      .icn {
+        background-position: -130px 0;
+      }
+
+      &:hover .icn {
+        background-position: -130px -20px;
+      }
+    }
+  }
+}
+
+
+//////////////
+// layout utilities
+//////////////
+
+/*doc
+---
+title: layout utilities
+name: layout
+category: utilities
+---
+
+example | extension
+--------|----------
+<p class="center-simple" style="width: 50%">i have am centered in the middle</p> | `@extend .center-simple`
+<p class="pad-xsmall-x">i have a small amount of padding ???? we dont' use this much, should we? </p> | `@extend .pad-xsmall-x`
+<div class="example-border-radius">i have a border radius</div> | ` @include border-radius()`
+<div class="example-border-radius-large">i have a large border radius</div> | ` @include border-radius($border-radius-large)`
+<div class="example-box-shadow">i have box-shadow</div> | ` @include box-shadow()`
+
+*/
+
+
+.center-simple {
+  margin: 0 auto;
+}
+
+.pad-xsmall-x{
+  padding: 0 $pad-default;
+}
+//
+// you need to use :before pseudo selector like this:
+//  .div_that_needs_overlay:before{
+//    @extend .overlay;
+//    background: overlay details
+//  }
+//
+.overlay {
+  background-position: bottom;
+  content: " ";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+//print utilities
+.print-only { display: none !important; }
+@media print {
+  .hide-on-print { display: none !important; }
+  .print-only { display: block !important; }
+  .hide-for-print { display: none !important; }
+  .show-for-print { display: inherit !important; }
+}
